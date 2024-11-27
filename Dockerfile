@@ -1,18 +1,19 @@
-# Use an official Python runtime as a parent image
-FROM python:3.10-slim
+# Use Python 3.9 slim image as the base image
+FROM python:3.9-slim
 
-# Set the working directory in the container
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+# Copy the requirements.txt first and install dependencies
+COPY requirements.txt .
 
-# Install any needed dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose the port the app runs on
-EXPOSE 8000
+# Copy the entire project to the container (this includes your Django app)
+COPY . /app
 
-# Run the application using Gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "temp2.wsgi:application"]
+# Expose port 5000
+EXPOSE 5000
 
+# Run the application using gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "Movie_Success_Prediction.wsgi:application"]
