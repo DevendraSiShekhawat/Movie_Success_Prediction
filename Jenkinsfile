@@ -3,12 +3,16 @@ pipeline {
 
     environment {
         IMAGE_NAME = "movie_success_prediction"
+        // Assuming these are stored as Jenkins credentials
+        DJANGO_SECRET_KEY = credentials('django-secret-key')  // Example: store secret key in Jenkins credentials
+        DATABASE_URL = credentials('database-url')  // Example: store database URL securely in Jenkins credentials
     }
 
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/yourusername/yourrepo.git'
+                // Clone the GitHub repository
+                git 'https://github.com/DevendraSiShekhawat/Movie_Success_Prediction.git'
             }
         }
         stage('Build Docker Image') {
@@ -30,8 +34,13 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Start the container
-                    sh "docker run -d -p 8000:8000 --name django_app ${IMAGE_NAME}"
+                    // Deploy the app using Docker with environment variables
+                    sh """
+                    docker run -d -p 8000:8000 --name django_app \
+                    -e DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY} \
+                    -e DATABASE_URL=${DATABASE_URL} \
+                    ${IMAGE_NAME}
+                    """
                 }
             }
         }
@@ -41,6 +50,8 @@ pipeline {
         always {
             // Clean up any stopped containers
             sh "docker container prune -f"
+            // Optional: Clean up unused Docker images to save space
+            sh "docker image prune -f"
         }
     }
 }
