@@ -16,4 +16,5 @@ COPY . /app
 EXPOSE 5000
 
 # Run the application using gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "Movie_Success_Prediction.wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "temp2.wsgi:application"]
+
