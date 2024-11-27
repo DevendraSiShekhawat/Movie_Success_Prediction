@@ -1,0 +1,11 @@
+asgiref==3.8.1
+Django==4.2
+gunicorn==23.0.0
+packaging==24.2
+sqlparse==0.5.2
+tzdata==2024.2
+beautifulsoup4==4.11.1
+youtube-dl==2021.12.17
+
+
+
