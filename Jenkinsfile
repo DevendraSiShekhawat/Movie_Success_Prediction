@@ -3,9 +3,9 @@ pipeline {
 
     environment {
         IMAGE_NAME = "movie_success_prediction"
-        // Assuming these are stored as Jenkins credentials
-        DJANGO_SECRET_KEY = credentials('django-secret-key')  // Example: store secret key in Jenkins credentials
-        DATABASE_URL = credentials('database-url')  // Example: store database URL securely in Jenkins credentials
+        // Fetching credentials securely from Jenkins
+        DJANGO_SECRET_KEY = credentials('django-secret-key') 
+        DATABASE_URL = credentials('database-url') 
     }
 
     stages {
@@ -34,7 +34,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Deploy the app using Docker with environment variables
+                    // Deploy the app using Docker and inject necessary secrets as environment variables
                     sh """
                     docker run -d -p 8000:8000 --name django_app \
                     -e DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY} \
@@ -50,7 +50,7 @@ pipeline {
         always {
             // Clean up any stopped containers
             sh "docker container prune -f"
-            // Optional: Clean up unused Docker images to save space
+            // Optionally, clean up unused Docker images to save space
             sh "docker image prune -f"
         }
     }
