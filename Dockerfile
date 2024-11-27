@@ -1,20 +1,23 @@
-# Use Python 3.9 slim image as the base image
+# Use an official Python runtime as the base image
 FROM python:3.9-slim
 
-# Set the working directory inside the container
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy the requirements.txt first and install dependencies
+# Copy the requirements.txt and install dependencies
 COPY requirements.txt .
 
+# Install any dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the entire project to the container (this includes your Django app)
-COPY . /app
+# Copy the rest of the application files
+COPY . /app/
 
-# Expose port 5000
+# Set the environment variable for Django settings module
+ENV DJANGO_SETTINGS_MODULE=mvs.settings
+
+# Expose port 5000 to be able to access the app outside the container
 EXPOSE 5000
 
-# Run the application using gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "temp2.wsgi:application"]
-
+# Command to run the Gunicorn server
+CMD ["gunicorn", "temp2.wsgi:application", "--bind", "0.0.0.0:5000"]
