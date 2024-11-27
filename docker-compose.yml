@@ -8,7 +8,8 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - .:/app
+  - ./static:/app/static
+  - ./media:/app/media
     depends_on:
       - db
 
