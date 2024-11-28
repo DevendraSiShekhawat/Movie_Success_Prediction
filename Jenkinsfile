@@ -39,9 +39,8 @@ pipeline {
 
     post {
         always {
-            node {
-                sh 'docker container prune --force'
-            }
+            // Removed node block here to avoid label errors
+            sh 'docker container prune --force || true'
         }
         success {
             echo 'Pipeline executed successfully.'
